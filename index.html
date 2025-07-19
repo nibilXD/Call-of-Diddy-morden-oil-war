@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Call of Diddy: Modern Oil War</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #1a1a1a;
+            color: #ffffff;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Popup Styles */
+        .popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .popup-content {
+            background: #2c2c2c;
+            padding: 40px;
+            border-radius: 10px;
+            text-align: center;
+            max-width: 500px;
+            border: 2px solid #ff4d94;
+        }
+
+        .popup-content h2 {
+            color: #ff4d94;
+            margin-bottom: 20px;
+        }
+
+        .popup-content p {
+            margin-bottom: 30px;
+            color: #ccc;
+        }
+
+        .popup-content button {
+            padding: 10px 20px;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+
+        .popup-content .btn-continue {
+            background: #ff4d94;
+            color: #fff;
+        }
+
+        .popup-content .btn-exit {
+            background: #555;
+            color: #fff;
+        }
+
+        .popup-content button:hover {
+            opacity: 0.9;
+        }
+
+        .blocked {
+            display: none;
+            text-align: center;
+            padding: 100px 20px;
+            color: #ff4d94;
+            font-size: 24px;
+        }
+
+        /* Main Page */
+        .main-content {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            text-align: center;
+            padding: 50px 20px;
+            background: linear-gradient(180deg, #ff4d94, #1a1a1a);
+            width: 100%;
+        }
+
+        header h1 {
+            font-size: 48px;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .poster img {
+            width: 100%;
+            max-width: 1024px;
+            height: auto;
+            margin: 20px 0;
+            border: 3px solid #ff4d94;
+            border-radius: 10px;
+        }
+
+        .description, .features, .editions, .platforms, .requirements, .achievements, .certifications {
+            max-width: 1300px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .description h2, .features h2, .editions h2, .platforms h2, .requirements h2, .achievements h2 {
+            color: #ff4d94;
+            font-size: 36px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .description p {
+            font-size: 18px;
+            color: #ccc;
+            text-align: center;
+        }
+
+        .trailer iframe {
+            width: 100%;
+            max-width: 800px;
+            height: 450px;
+            margin: 20px auto;
+            display: block;
+            border: 2px solid #ff4d94;
+            border-radius: 10px;
+        }
+
+        .screenshots {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .screenshots img {
+            width: 400px;
+            max-width: 3000px;
+            height: auto;
+            border: 2px solid #ff4d94;
+            border-radius: 10px;
+        }
+
+        .features-grid, .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .feature-card, .achievement-card {
+            background: #2c2c2c;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid #ff4d94;
+        }
+
+        .feature-card svg, .achievement-card svg {
+            font-size: 40px;
+            color: #ff4d94;
+            margin-bottom: 10px;
+        }
+
+        .feature-card h3, .achievement-card h3 {
+            color: #fff;
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .feature-card p, .achievement-card p {
+            color: #ccc;
+        }
+
+        .editions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .edition-card {
+            background: #2c2c2c;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #ff4d94;
+            text-align: center;
+        }
+
+        .edition-card h3 {
+            color: #ff4d94;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .edition-card p {
+            color: #ccc;
+            margin-bottom: 10px;
+        }
+
+        .edition-card ul {
+            list-style: none;
+            color: #ccc;
+            margin-bottom: 20px;
+        }
+
+        .edition-card ul li {
+            margin: 5px 0;
+        }
+
+        .platforms-grid, .requirements-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .platform-card, .requirement-card {
+            background: #2c2c2c;
+            padding: 50px;
+            border-radius: 10px;
+            border: 1px solid #ff4d94;
+            text-align: center;
+            width: 355px;
+        }
+
+        .platform-card svg, .requirement-card svg {
+            font-size: 30px;
+            color: #ff4d94;
+            margin-bottom: 10px;
+        }
+
+        .buy-now {
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        .buy-now a {
+            background: #ff4d94;
+            color: #fff;
+            padding: 15px 30px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 18px;
+            transition: background 0.3s;
+        }
+
+        .buy-now a:hover {
+            background: #e04385;
+        }
+
+        .certifications {
+            text-align: center;
+        }
+
+        .certifications img {
+            margin: 10px;
+        }
+
+        footer {
+            background: #2c2c2c;
+            padding: 20px;
+            text-align: center;
+            color: #ccc;
+            border-top: 2px solid #ff4d94;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 32px;
+            }
+
+            .description h2, .features h2, .editions h2, .platforms h2, .requirements h2, .achievements h2 {
+                font-size: 28px;
+            }
+
+            .trailer iframe {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Popup -->
+    <div class="popup" id="agePopup">
+        <div class="popup-content">
+            <h2>Mature Content Warning</h2>
+            <p>This game may contain content not appropriate for all ages, including oil, drugs, nudity, sexual content, and parties.</p>
+            <button class="btn-continue" onclick="showMain()">Yes, I'm under 17 - Continue</button>
+            <button class="btn-exit" onclick="showBlocked()">No, I'm above 18 - Exit</button>
+        </div>
+    </div>
+
+    <!-- Blocked Page -->
+    <div class="blocked" id="blockedPage">
+        <h2>Access Blocked</h2>
+        <p>You must be under 17 to enter this page.</p>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <header>
+            <h1>Call of Diddy: Modern Oil War</h1>
+        </header>
+
+        <div class="poster">
+            <img src="pos.jpg" alt="Game Poster">
+        </div>
+
+        <section class="description">
+            <h2>Game Description</h2>
+            <p>“Slide into the smoothest battlefield ever.”</p>
+            <p>In a world torn apart by dryness and chaos, only one man dares to fight with hydration. Command the elite Diddy Ops Unit in the most slippery, over-the-top FPS parody of the decade. Armed with baby lotion rifles, tactical aloe strikes, and coconut-scented grenades, you’ll moisturize your way through oil-rich warzones in search of hydration... and domination. Whether it’s Multiplayer Grease Pit, Campaign Mode: Operation Hydration, or Lotion Royale, victory smells like lavender. Lather up. Lock on. Oil out. The war for moisture has begun.</p>
+        </section>
+
+
+        <section class="screenshots">
+            <img src="s1.jpg" alt="Screenshot 1">
+            <img src="s2.jpg" alt="Screenshot 2">
+            <img src="s3.jpg" alt="Screenshot 3">
+            <img src="s4.jpg" alt="Screenshot 4">
+        </section>
+
+        <section class="features">
+            <h2>Features or Tactical Loadout</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <i class="fas fa-spray-can"></i>
+                    <h3>Tactical Moisturization</h3>
+                    <p>Hydrate your squad and confuse enemies with aloe-powered splash attacks.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-oil-can"></i>
+                    <h3>Oil Rig Warfare</h3>
+                    <p>Battle in zones rich with resources (and rich with memes).</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-flask"></i>
+                    <h3>Legendary Lotion Loadouts</h3>
+                    <p>Unlock the Coconut Cream Blaster, Aloe Flamethrower & Pink Grenade Launcher.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-users"></i>
+                    <h3>Multiplayer Grease Pit Mode</h3>
+                    <p>6v6 chaos where the last team standing isn't too slippery to aim.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-running"></i>
+                    <h3>Slippery Slide Movement</h3>
+                    <p>Advanced slide mechanics powered by baby oil.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-paint-roller"></i>
+                    <h3>Custom Lotion Skins</h3>
+                    <p>Dress to impress with Strawberry Slick, Lavender Ops & Cucumber Cool.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="achievements">
+            <h2>In-Game Achievements</h2>
+            <div class="achievements-grid">
+                <div class="achievement-card">
+                    <i class="fas fa-trophy"></i>
+                    <h3>Moist Master</h3>
+                    <p>Win 10 matches without drying out.</p>
+                </div>
+                <div class="achievement-card">
+                    <i class="fas fa-syringe"></i>
+                    <h3>First Blood, First Rub</h3>
+                    <p>Get your first kill using the baby lotion blaster.</p>
+                </div>
+                <div class="achievement-card">
+                    <i class="fas fa-running"></i>
+                    <h3>Slippery Assassin</h3>
+                    <p>Slide-kill 5 enemies in a row without stopping.</p>
+                </div>
+                <div class="achievement-card">
+                    <i class="fas fa-fire"></i>
+                    <h3>Grease God</h3>
+                    <p>Achieve 69 killstreak with the Coconut Cream Launcher.</p>
+                </div>
+                <div class="achievement-card">
+                    <i class="fas fa-medkit"></i>
+                    <h3>Tactical Hydration</h3>
+                    <p>Revive 3 teammates using Aloe Revive Spray.</p>
+                </div>
+                <div class="achievement-card">
+                    <i class="fas fa-shield-alt"></i>
+                    <h3>Too Smooth to Touch</h3>
+                    <p>Complete a mission without taking any damage (or friction).</p>
+                </div>
+                <div class="achievement-card">
+                    <i class="fas fa-soap"></i>
+                    <h3>Soap & Slide</h3>
+                    <p>Slide 420 meters continuously on oil-slicked ground.</p>
+                </div>
+                <div class="achievement-card">
+                    <i class="fas fa-baby"></i>
+                    <h3>Baby Wipe Warrior</h3>
+                    <p>Eliminate a boss using only wipes and sass.</p>
+                </div>
+                <div class="achievement-card">
+                    <i class="fas fa-box-open"></i>
+                    <h3>Loot Lathered</h3>
+                    <p>Open 50 loot boxes and get 5 duplicate lotion caps.</p>
+                </div>
+                <div class="achievement-card">
+                    <i class="fas fa-bomb"></i>
+                    <h3>Bubble Trouble</h3>
+                    <p>Get a triple kill with a Chamomile Foam Grenade.</p>
+                </div>
+                <div class="achievement-card">
+                    <i class="fas fa-mask"></i>
+                    <h3>Skin Deep</h3>
+                    <p>Unlock every character skin, including “Slick Samurai” and “The Moist Monk.”</p>
+                </div>
+                <div class="achievement-card">
+                    <i class="fas fa-crosshairs"></i>
+                    <h3>Cream of the Crop</h3>
+                    <p>Land 100 headshots using the Aloe Sniper.</p>
+                </div>
+                <div class="achievement-card">
+                    <i class="fas fa-dove"></i>
+                    <h3>Peace Through Hydration</h3>
+                    <p>Complete campaign without firing a single shot — only lotion diplomacy.</p>
+                </div>
+                <div class="achievement-card">
+                    <i class="fas fa-gamepad"></i>
+                    <h3>Ultra Slippery Mode UNLOCKED</h3>
+                    <p>Beat the game on "Slippery AF" difficulty.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="editions">
+            <h2>Game Editions</h2>
+            <div class="editions-grid">
+                <div class="edition-card">
+                    <h3>Standard Lotion Edition</h3>
+                    <p>“Stay smooth, stay dangerous.”</p>
+                    <ul>
+                        <li>Base game</li>
+                        <li>Starter Lotion Loadout</li>
+                        <li>Diddy Basic Tactical Gloves</li>
+                        <li>Free trial of “Grease Pit” multiplayer mode</li>
+                        <li>Access to “Operation Hydration” campaign</li>
+                    </ul>
+                    <p>Price: $99<br>*Includes 15 ads for baby oil brands</p>
+                </div>
+                <div class="edition-card">
+                    <h3>Grease Deluxe Edition</h3>
+                    <p>“Because smoothness is a weapon.”</p>
+                    <ul>
+                        <li>Everything in Standard</li>
+                        <li>Pink Camo Skin Pack</li>
+                        <li>Legendary Coconut Cream Blaster</li>
+                        <li>Aloe Strike Killstreak</li>
+                        <li>Tactical Slippers (bonus gear)</li>
+                        <li>Sound Pack: “Moist Kill Confirmed” voice lines</li>
+                        <li>“Slide Into Action” bonus intro animation</li>
+                    </ul>
+                    <p>Price: $169.69<br>*Free oil-change for your lotion launcher</p>
+                </div>
+                <div class="edition-card">
+                    <h3>Ultimate Moist Ops Edition</h3>
+                    <p>“This battlefield is soaked.”</p>
+                    <ul>
+                        <li>Everything in Deluxe</li>
+                        <li>Exclusive “Diddy Dance Victory Emote”</li>
+                        <li>Scented Screen Wipe Pack (real smell not included)</li>
+                        <li>Diamond-Encrusted Lotion Bottle Weapon Skin</li>
+                        <li>“Slippery AF” Title Badge</li>
+                        <li>Access to unreleased map: The Bathtub</li>
+                        <li>24K Golden Baby Powder Grenade skin</li>
+                        <li>Behind-the-scenes dev documentary: “Grease Is the Mission”</li>
+                    </ul>
+                    <p>Price: $199.99<br>*Slickest experience guaranteed. May cause sliding.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="platforms">
+            <h2>Available Platforms</h2>
+            <div class="platforms-grid">
+                <div class="platform-card">
+                    <i class="fas fa-desktop"></i>
+                    <p>PC (diddyOS, MoistWindows)</p>
+                </div>
+                <div class="platform-card">
+                    <i class="fab fa-playstation"></i>
+                    <p>diddyStation 5 (with exclusive Lavender Lotion Pack)</p>
+                </div>
+                <div class="platform-card">
+                    <i class="fab fa-xbox"></i>
+                    <p>Xdiddy Series X|S (supports 4K Smooth Rendering)</p>
+                </div>
+                <div class="platform-card">
+                    <i class="fas fa-mobile-alt"></i>
+                    <p>Mobile (diddy phone) – "Diddy Lite" version</p>
+                </div>
+                <div class="platform-card">
+                    <i class="fas fa-snowflake"></i>
+                    <p>Smart Fridge (Beta) – “For the chillest gameplay”</p>
+                </div>
+                <div class="platform-card">
+                    <i class="fas fa-gamepad"></i>
+                    <p>diddy Deck – Greasy Mode Compatible</p>
+                </div>
+                <div class="platform-card">
+                    <i class="fas fa-bread-slice"></i>
+                    <p>Toaster (Experimental) – May overheat</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="requirements">
+            <h2>System Requirements</h2>
+            <div class="requirements-grid">
+                <div class="requirement-card">
+                    <i class="fas fa-cog"></i>
+                    <h3>Minimum Requirements</h3>
+                    <p>OS: diddyOS 7 (Lubed Edition)<br>CPU: 1.5GHz OilCeleron<br>RAM: 4GB SmoothDDR<br>GPU: Intel HD Slippery<br>Storage: 4.20GB<br>DirectX: 11<br>Sound: Must support squelch.wav<br>Internet: Required for Grease Pit</p>
+                </div>
+                <div class="requirement-card">
+                    <i class="fas fa-rocket"></i>
+                    <h3>Recommended Specs</h3>
+                    <p>OS:DIDDY Quantum computer with graphical interface. Hydration Build<br>CPU: MFS mayorona Grease 9<br>RAM: 156GB Ultra Moist<br>GPU: URTX 9090 Lotion Cooled<br>Storage: 6999GB (including baby oil physics)<br>DirectX: 12.1 with Aloe Shader Support<br>Sound: Surround Moisture Audio 7.1<br>Internet: Smooth Fiber 69 Mbps</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="buy-now">
+            <a href="https://www.instagram.com/nibilkrishna">Buy Now</a>
+        </div>
+
+        <section class="certifications">
+            <img src="esrb.jpg" alt="ESRB Rating" width="88" height="120">
+            <img src="esrb1.jpg" alt="ESRB Rating" width="324" height="201">
+        </section>
+
+ <footer>
+            <p>&copy; 2025 Call of Diddy: Modern Oil War. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        function showMain() {
+            document.getElementById('agePopup').style.display = 'none';
+            document.getElementById('mainContent').style.display = 'flex';
+            document.getElementById('blockedPage').style.display = 'none';
+        }
+
+        function showBlocked() {
+            document.getElementById('agePopup').style.display = 'none';
+            document.getElementById('mainContent').style.display = 'none';
+            document.getElementById('blockedPage').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
